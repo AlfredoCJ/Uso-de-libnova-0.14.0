@@ -1,4 +1,4 @@
-# Uso-de-libnova-0.14
+# Uso de libnova 0.14
 
 ### Castellano: ###
 
