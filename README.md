@@ -1,37 +1,44 @@
-# Uso de libnova 0.14
+# Uso de libnova 0.14.0
 
 ### Castellano: ###
 
-Ejemplos de códigos para utilizar con la librería libnova 0.14.1 en linux (raspbian)
+Ejemplos de códigos para utilizar con la librería libnova 0.14.0 en linux (Raspbian Jessie)
 
-Se incluye:
- - Directorio "libnova-0.14.1", que consiste en una pequeña modificación de la versión 0.14.0 que permite un uso fácil y rápido.
- - Ejemplos de uso de las opciones más importantes de esta libería, como:
+Entre ellos busco responder a los siguientes apartados:
     - Hora de amanecer y atardecer del sol a partir de una posición geográfica y una fecha.
     - Posición de la luna a partir de una posición geográfica y una fecha.
     - Posición de los planetas mayores (excepto la Tierra) a partir de una posición geográfica y una fecha.
     - Posición de Plutón a partir de una posición geográfica y una fecha.
     - Una conversión de coordenadas RaDec a coordenadas AltAz.
+	- Posiciones de cometas y planetas pequeños utilizando la base de datos de MPC (por ahora no).
 
-Los cambios añadidos son los siguientes:
- - Muchas variables y constantes globales han sido renombradas para evitar duplicación de nombres en la compilación.
- - Todos los includes han sido comentados en todos los archivos, excepto el "libnova.h".
- - Ahora, es necesario especificar los includes (libnova.h y los *.c) en los archivos fuente.
-
-Estos cambios se han hecho porque he tenido muchos problemas con las 2 instalaciones disponibles (vía apt-get y vía make) y por no encontrar ningún manual en la web oficial.
+Para realizar la compilación de cada archivo es necesario ejecutar este comando:
+	gcc miLibnova.c /opt/libnova-0.14.0/src/*.o -lm -o miLibnova
 
 Se puede ver un ejemplo de instalación, compilación y ejecución en mi blog (bajo Raspbian Jessie), URL: http://lascosasdealfredo.blogspot.com.es/2016/03/libreria-libnova.html
 
 
 ### English: ###
 
-In this repository, you can see a fork of libnova 0.14.0, with a few changes and examples.
+In this repository, you can see examples of libnova 0.14.0 on linux (Raspbian Jessie).
 
-The most important changes are:
- - Many global constants and variables are renamed because it make a error compilation while the compilation.
- - All includes are been deleted putting it in a comment.
- - Now, you must to specify the source files (libnova.h and *.c) in the file that will be compiled.
+With this examples you can see this hits:
+	- Sunrise and Sunset time in a geographical position and date.
+	- Moon's position in a geographical position and date.
+	- Mayors planets' position (except Earth) in a geographical position and date.
+	- Pluto's position in a geographical position and date.
+	- Convert RaDec coordinates to AltAz coordinates.
+	- Comet's position and minors planets' position using MPC data base (not now).
 
-This changes are been included because I had many errors for this code, now I don't have any error.
+You can do a compilation of earch file with this command:
+	gcc miLibnova.c /opt/libnova-0.14.0/src/*.o -lm -o miLibnova
 
 You can see a example to install, compilation and execution in my blog (under Raspbian Jessie), URL: http://lascosasdealfredo.blogspot.com.es/2016/03/libreria-libnova.html
+
+
+
+
+
+
+
+
