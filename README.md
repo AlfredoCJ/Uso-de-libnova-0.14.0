@@ -15,7 +15,7 @@ Entre ellos busco responder a los siguientes apartados:
 Para realizar la compilación de cada archivo es necesario ejecutar este comando:
 	gcc miLibnova.c /opt/libnova-0.14.0/src/*.o -lm -o miLibnova
 
-Se puede ver un ejemplo de instalación, compilación y ejecución en mi blog (bajo Raspbian Jessie), URL: http://lascosasdealfredo.blogspot.com.es/2016/03/libreria-libnova.html
+Se puede ver un ejemplo de instalación, compilación y ejecución en mi blog (bajo Raspbian Jessie), URL: http://lascosasdealfredo.blogspot.com.es/2017/07/como-utilizar-la-libreria-libnova-en-c.html
 
 
 ### English: ###
@@ -33,7 +33,7 @@ With this examples you can see this hits:
 You can do a compilation of earch file with this command:
 	gcc miLibnova.c /opt/libnova-0.14.0/src/*.o -lm -o miLibnova
 
-You can see a example to install, compilation and execution in my blog (under Raspbian Jessie), URL: http://lascosasdealfredo.blogspot.com.es/2016/03/libreria-libnova.html
+You can see a example to install, compilation and execution in my blog (under Raspbian Jessie), URL: http://lascosasdealfredo.blogspot.com.es/2017/07/como-utilizar-la-libreria-libnova-en-c.html
 
 
 
