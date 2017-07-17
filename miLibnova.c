@@ -1,10 +1,3 @@
-// Lat Gra 36
-// Lat Min 42
-// Lat Seg 44.44415999999649
-// Lon Gra -4
-// Lon Min 24
-// Lon Seg 44.44416000000032
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -45,27 +38,34 @@ struct ln_dms convierteGdGms(double coordDecimal) {
 
 struct ln_hms convierteGdHms(double coordDecimal) {
 	struct ln_hms resultado;
-	// Las horas son la parte entera
-	resultado.hours = -1 * (int) coordDecimal;
-	// Para los minutos: quitamos la parte entera, multiplicamos por 60 y cogemos la parte entera de ese resultado
-	double min_seg = (coordDecimal - resultado.hours) * 60;
-	resultado.minutes = (int) min_seg;
-	// Para los segundos: quitamos la parte entera, multiplicamos por 60 y esos son los segundos
-	resultado.seconds = (min_seg - resultado.minutes) * 60;
+	// Las horas son la parte entera dividido entre 15 (1h=15º)
+	resultado.hours = (int) (coordDecimal / 15);
+	// Para los minutos: quitamos las horas, multiplicamos por 60 y cogemos la parte entera de ese resultado dividido por 15
+	double min_seg = (coordDecimal - (resultado.hours * 15)) * 60;
+	resultado.minutes = (int) (min_seg / 15);
+	// Para los segundos: quitamos los minutos, multiplicamos por 3.988... y esos son los segundos
+	resultado.seconds = (min_seg - (resultado.minutes * 15)) * 3.98809523;
 	return resultado;
 }
 
 char* traduceCoordenadasString(struct ln_hrz_posn objAltAz) {
+	int altInt = (int) objAltAz.alt;
+	int altDec = (int) ((objAltAz.alt - altInt) * 1000000);
+	if (altDec < 0)
+		altDec *= -1;
+	int azInt = (int) objAltAz.az;
+	int azDec = (int) ((objAltAz.az - azInt) * 1000000);
+	
     char* strResp = malloc(sizeof(char) * 100);
-    sprintf(strResp, "{'resp':'ok','alt':'%f','az':'%f'}", objAltAz.alt, objAltAz.az);
+    sprintf(strResp, "{\"resp\":\"ok\",\"alt\":%d.%.6d,\"az\":%d.%.6d}", altInt, altDec, azInt, azDec);
     return strResp;
 }
 
 struct ln_hrz_posn getAltazFromRadecInDate(struct ln_equ_posn objRaDec, double JD, double latitud, double longitud) {
 	// Datos de la localización
 	struct ln_lnlat_posn localizacion;
-	localizacion.lat = 36.7123456;
-	localizacion.lng = -4.4123456;
+	localizacion.lat = latitud;
+	localizacion.lng = longitud;
 
 	// Cogemos los datos de la Ascención Recta (1ª ln_dms del array)
 	struct lnh_equ_posn objRaDec2;
@@ -219,7 +219,7 @@ char* getAltazFromName(char* objStr, double latitud, double longitud) {
 	    return strResp;
 	}else{
 		char* strResp = malloc(sizeof(char) * 40);
-		sprintf(strResp, "{'resp':'ko','msg':'Objeto desconocido'}");
+		sprintf(strResp, "{\"resp\":\"ko\",\"msg\":\"Objeto desconocido\"}");
 	    return strResp;
 	}
 }
@@ -246,7 +246,7 @@ char* getSunriseSunset(int dia, int mes, int anio, double latitud, double longit
 	// Si no es visible...
 	if (ln_get_solar_rst(JD, &localizacion, &rst) != 0) {
 		char* strKo = malloc(sizeof(char) * 60);
-		sprintf(strKo, "{'resp':'ko';'msg':'Estas por encima del circulo polar'}");
+		sprintf(strKo, "{\"resp\":\"ko\";\"msg\":\"Estas por encima del circulo polar\"}");
 		return strKo;
 	}else{  // si es visible...
 		// Extraemos los datos
@@ -264,7 +264,7 @@ char* getSunriseSunset(int dia, int mes, int anio, double latitud, double longit
 
 		// Creo la respuesta y la envío
 	    char* strResp = (char *) malloc(sizeof(char) * 60);
-		sprintf(strResp, "{'resp':'ok','amanecer':'%d','atardecer':'%d'}", amanecer, atardecer);
+		sprintf(strResp, "{\"resp\":\"ok\",\"amanecer\":%d,\"atardecer\":%d,\"amanecer-horas\":%d,\"amanecer-minutos\":%d,\"amanecer-segundos\":%f,\"atardecer-horas\":%d,\"atardecer-minutos\":%d,\"atardecer-segundos\":%f}", amanecer, atardecer, rise.hours, rise.minutes, rise.seconds, set.hours, set.minutes, set.seconds);
 
 		return strResp;
 	}

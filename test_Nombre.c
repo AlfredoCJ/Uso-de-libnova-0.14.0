@@ -38,19 +38,26 @@ struct ln_dms convierteGdGms(double coordDecimal) {
 
 struct ln_hms convierteGdHms(double coordDecimal) {
 	struct ln_hms resultado;
-	// Las horas son la parte entera
-	resultado.hours = -1 * (int) coordDecimal;
-	// Para los minutos: quitamos la parte entera, multiplicamos por 60 y cogemos la parte entera de ese resultado
-	double min_seg = (coordDecimal - resultado.hours) * 60;
-	resultado.minutes = (int) min_seg;
-	// Para los segundos: quitamos la parte entera, multiplicamos por 60 y esos son los segundos
-	resultado.seconds = (min_seg - resultado.minutes) * 60;
+	// Las horas son la parte entera dividido entre 15 (1h=15º)
+	resultado.hours = (int) (coordDecimal / 15);
+	// Para los minutos: quitamos las horas, multiplicamos por 60 y cogemos la parte entera de ese resultado dividido por 15
+	double min_seg = (coordDecimal - (resultado.hours * 15)) * 60;
+	resultado.minutes = (int) (min_seg / 15);
+	// Para los segundos: quitamos los minutos, multiplicamos por 3.988... y esos son los segundos
+	resultado.seconds = (min_seg - (resultado.minutes * 15)) * 3.98809523;
 	return resultado;
 }
 
 char* traduceCoordenadasString(struct ln_hrz_posn objAltAz) {
+	int altInt = (int) objAltAz.alt;
+	int altDec = (int) ((objAltAz.alt - altInt) * 1000000);
+	if (altDec < 0)
+		altDec *= -1;
+	int azInt = (int) objAltAz.az;
+	int azDec = (int) ((objAltAz.az - azInt) * 1000000);
+	
     char* strResp = malloc(sizeof(char) * 100);
-    sprintf(strResp, "{'resp':'ok','alt':'%f','az':'%f'}", objAltAz.alt, objAltAz.az);
+    sprintf(strResp, "{\"resp\":\"ok\",\"alt\":%d.%.6d,\"az\":%d.%.6d}", altInt, altDec, azInt, azDec);
     return strResp;
 }
 
@@ -180,7 +187,7 @@ char* getAltazFromName(char* objStr) {
 	    return strResp;
 	}else{
 		char* strResp = malloc(sizeof(char) * 40);
-		sprintf(strResp, "{'resp':'ko','msg':'Objeto desconocido'}");
+		sprintf(strResp, "{\"resp\":\"ko','msg':'Objeto desconocido'}");
 	    return strResp;
 	}
 }

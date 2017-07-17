@@ -21,7 +21,7 @@ char* getSunriseSunset(struct ln_date fecha) {
 	// Si no es visible...
 	if (ln_get_solar_rst(JD, &localizacion, &rst) != 0) {
 		char* strKo = malloc(sizeof(char) * 60);
-		sprintf(strKo, "{'resp':'ko';'msg':'Estas por encima del circulo polar'}");
+		sprintf(strKo, "{\"resp\":\"ko\";\"msg\":\"Estas por encima del circulo polar\"}");
 		return strKo;
 	}else{  // si es visible...
 		// Extraemos los datos
@@ -39,8 +39,7 @@ char* getSunriseSunset(struct ln_date fecha) {
 
 		// Creo la respuesta y la envío
 	    char* strResp = (char *) malloc(sizeof(char) * 60);
-		sprintf(strResp, "{'resp':'ok','amanecer':'%d','atardecer':'%d'}", amanecer, atardecer);
-
+		sprintf(strResp, "{\"resp\":\"ok\",\"amanecer\":%d,\"atardecer\":%d,\"amanecer-horas\":%d,\"amanecer-minutos\":%d,\"amanecer-segundos\":%d,\"atardecer-horas\":%d,\"atardecer-minutos\":%d,\"atardecer-segundos\":%d}", amanecer, atardecer, rise.hours, rise.minutes, rise.seconds, set.hours, set.minutes, set.seconds);
 		return strResp;
 	}
 }
